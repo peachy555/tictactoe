@@ -5,6 +5,13 @@
   height: 70px;
 }
 
+.box.big {
+  display: inline-block;
+  border: 3px solid black;
+  width: 160px;
+  height: 160px;
+}
+
 .box:hover {
   background-color: rgba(0, 0, 0, 0.1);
 }
@@ -18,39 +25,47 @@
   padding: 5px 0 0 5px;
   /*sum of spacing between boxes: 20px*/
   width: 230px;
-
+}
+#board.big {
+  border: 4px solid black;
+  padding: 5px 0 0 5px;
+  /*sum of spacing between boxes: 20px*/
+  width: 500px;
 }
 
 h1 {
-  text-align: center;
 }
 
 #heading {
   margin-top: 40px;
-  margin-bottom: 10px;
+  margin-bottom: 30px;
+  text-align: center;
+  font-family: 'Supermercado One', cursive;
+  font-size: 40px;
 }
 
-#winner-message {
-  text-align: center;
-}
 
 #winner-box, #current-score{
   margin: 10px;
   height: 30px;
   text-align: center;
+  font-family: 'Supermercado One', cursive;
+  font-size: 25px;
+}
+#winner-box {
+  margin-top: 30px;
 }
 
 .x{
   background-image: url(../images/x.png);
-  background-size: 70px 70px;
+  background-size: cover;
 }
 
 .o{
   background-image: url(../images/o.png);
-  background-size: 70px 70px;
+  background-size: cover;
 }
 
 .clear{
   background-image: none;
-  background-colo: white;
 }

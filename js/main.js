@@ -8,6 +8,7 @@ $(document).ready(function() {
   $winnerMessage = $('#winner-message');
   $currentScore = $('#current-score');
 
+  var boardSize = 'normal';
   var scoreBoard = {
     player1: 0,
     player2: 0
@@ -110,7 +111,19 @@ $(document).ready(function() {
     updateScoreboard();
   });
 
-
+  $(document).on('click', '#board-size', function() {
+    if (boardSize === 'normal') {
+      boardSize = 'big';
+      $(".box").addClass('big');
+      $("#board").addClass('big');
+      $('#board-size').html('Too BIG!!!');
+    } else {
+      boardSize = 'normal';
+      $(".box").removeClass('big');
+      $("#board").removeClass('big');
+      $('#board-size').html('Bigger!!!!');
+    }
+  });
 
 
 })
