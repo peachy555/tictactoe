@@ -103,6 +103,13 @@ $(document).ready(function() {
     initializeGame();
   });
 
+  $(document).on('click', '#clear-board', function() {
+    scoreBoard.player1 = 0;
+    scoreBoard.player2 = 0;
+    initializeGame();
+    updateScoreboard();
+  });
+
 
 
 
