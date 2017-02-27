@@ -3,6 +3,14 @@
 // - How to "remove/hide" background image of .box ('x' and 'o')
 
 
+// Things left to do
+// - Use LocalStorage
+// - Support networked multiplayer
+// - Customize player's tokens
+// - Create an AI opponent
+
+
+var myFirebaseRef = new Firebase("https://<YOUR-FIREBASE-APP>.firebaseio.com/");
 
 $(document).ready(function() {
   $winnerMessage = $('#winner-message');
@@ -84,8 +92,8 @@ $(document).ready(function() {
         scoreBoard['player'+this.winner]++;
         updateScoreboard();
         $winnerMessage = $('#winner-message');
-        $winnerMessage.show();
         $winnerMessage.html('The winner is player ' + this.winner + '!');
+        $winnerMessage.fadeIn();
 
       }
     },
@@ -101,7 +109,11 @@ $(document).ready(function() {
   });
 
   $(document).on('click', '#new-game', function() {
-    initializeGame();
+    $("#winner-message").fadeOut(800);
+    $("#board").fadeOut(800, function() {
+      initializeGame();
+    });
+    $("#board").fadeIn(800);
   });
 
   $(document).on('click', '#clear-board', function() {
