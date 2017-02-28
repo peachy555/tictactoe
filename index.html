@@ -20,6 +20,7 @@
     firebase.initializeApp(config);
   </script>
   <script src="js/jquery.js"></script>
+  <script src="Semantic-UI-CSS-master/semantic.js"></script>
   <script src="js/main.js"></script>
 
   <title>Tic Tac Toe</title>
@@ -43,14 +44,33 @@
       <div class="box" id="2-2"></div>
     </div>
   </div>
-  <div id="winner-box" class="ui middle aligned container">
-    <div id="winner-message">You Win!</div>
+  <div class="ui middle aligned container">
+    <div class="current-score">1-1</div>
   </div>
-  <div id="current-score" class="ui middle aligned container">1-1</div>
   <div id="menu" class="ui center aligned segment">
     <button id="new-game" class="ui primary button">New Game</button>
     <button id="board-size" class="ui button">Bigger!!!!</button>
     <button id="clear-board" class="ui button">Restart!</button>
+    <button id="single-play" class="ui button">Single Player</button>
+  </div>
+  <!-- <div id="popUp-background"></div> -->
+  <!-- <div id="popUp-container" class="ui one column centered grid">
+    <div id="popUp-box" class="column">
+      <div id="winner-box">
+        <div id="winner-message">You Win!</div>
+        <button id="new-game-popUp" class="ui primary button">New Game</button>
+      </div>
+    </div>
+  </div> -->
+  <div id="popUp-box" class="ui small modal">
+    <div class="image content">
+      <div class="description">
+        <div id="winner-message" class="ui middle">You Win!</div>
+        <div id="button-box" class="ui center aligned segment">
+          <button id="new-game-popUp" class="ui centered primary button">New Game</button>
+        </div>
+      </div>
+    </div>
   </div>
 </body>
 </html>
