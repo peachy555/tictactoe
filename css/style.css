@@ -87,6 +87,11 @@ body{
   background-size: cover;
 }
 
+.draw {
+  background-image: url(../images/draw.gif);
+  background-size: cover;
+}
+
 #name-box {
   height: 18px;
 }

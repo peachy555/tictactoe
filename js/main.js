@@ -18,6 +18,7 @@ $(document).ready(function() {
   $popUpLogo = $('#popUp-logo');
 
   var boardSize = 'normal';
+  var inputCounter = 1;
 
   var initializeGame = function() {
     var localGame = localStorage.getItem("tictactoeState");
@@ -37,8 +38,7 @@ $(document).ready(function() {
       updateScoreboard();
     } else {
       // Press Enter
-      $('#game-mode-box').modal('show');
-      // $('#input-box').modal('show');
+      $('#init-game-mode-box').modal('show');
     }
   }
 
@@ -77,12 +77,12 @@ $(document).ready(function() {
               [0, 0, 0]],
       scoreBoard: {
         player1: {
-          name: 'Peach',
+          name: 'Name1',
           score: 0,
           logo: 'o'
         },
         player2: {
-          name: '"I"',
+          name: 'Name2',
           score: 0,
           logo: 'x'
         }
@@ -314,6 +314,7 @@ $(document).ready(function() {
           $popUpLogo.addClass(this.state.scoreBoard.player2.logo);
           $winnerMessage.html(this.state.scoreBoard.player2.name + ' wins!').show();
         } else {
+          $popUpLogo.addClass('draw');
           $winnerMessage.html('Draw!').show();
           updateScoreboard();
         }
@@ -337,6 +338,20 @@ $(document).ready(function() {
     tictactoe.state.scoreBoard.player2.score = 0;
     resetGame();
     $('#game-mode-box').modal('hide');
+  });
+
+  // init-single-mode clicked
+  $(document).on('click', '#init-single-mode', function() {
+    tictactoe.state.currentPlayer = 1;
+    $('#input-box').modal('show');
+  });
+
+  // init-single-mode clicked
+  $(document).on('click', '#init-local-mode', function() {
+    tictactoe.state.currentPlayer = 1;
+    $('#input-box').modal('show');
+    tictactoe.state.currentPlayer = 2;
+    $('#input-box').modal('show');
   });
 
   // Local game mode button
@@ -380,23 +395,44 @@ $(document).ready(function() {
   // Choosing logo in "input-box"
   $(document).on('click', '.logo-element', function() {
     var logoName = $(this).attr('id');
-    tictactoe.state.scoreBoard.player1.logo = logoName;
+    var selectedPlayer ='player'+tictactoe.state.currentPlayer;
+    tictactoe.state.scoreBoard[selectedPlayer].logo = logoName;
     console.log(logoName);
   });
 
   // Enter game button in "input-box"
   $(document).on('click', '#enter-game', function() {
-    tictactoe.state.scoreBoard.player1.name = $('#name-box').val();
+    var selectedPlayer ='player'+tictactoe.state.currentPlayer;
+    tictactoe.state.scoreBoard[selectedPlayer].name = $('#name-box').val();
+    $('#name-box').val('')
     $('#input-box').modal('hide');
+    if (inputCounter<2) {
+      tictactoe.state.currentPlayer = 2;
+      $('#input-box').modal('show');
+    } else {
+      tictactoe.state.currentPlayer = 1;
+    }
+    inputCounter++;
+
   });
 
   // Press enter in "input-box"
   $('#input-box').keypress(function(e) {
     if(e.which == 13) {
-      tictactoe.state.scoreBoard.player1.name = $('#name-box').val();
+      var selectedPlayer ='player'+tictactoe.state.currentPlayer;
+      tictactoe.state.scoreBoard[selectedPlayer].name = $('#name-box').val();
+      $('#name-box').val('')
       $('#input-box').modal('hide');
+      if (inputCounter<2) {
+        tictactoe.state.currentPlayer = 2;
+        $('#input-box').modal('show');
+      } else {
+        tictactoe.state.currentPlayer = 1;
+      }
+      inputCounter++;
     }
   });
+
 
 // End of JavaScript
 });
