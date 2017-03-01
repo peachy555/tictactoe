@@ -38,9 +38,6 @@ body{
   width: 500px;
 }
 
-h1 {
-}
-
 #heading {
   margin-top: 40px;
   margin-bottom: 30px;
@@ -49,36 +46,71 @@ h1 {
   font-size: 40px;
 }
 
-#winner-box, .current-score{
+#winner-box, #current-score, #player-name{
   margin: 10px;
   height: 30px;
   text-align: center;
   font-family: 'Supermercado One', cursive;
   font-size: 25px;
 }
-#winner-message {
+#winner-message, #mode-message{
   margin: 10px;
   font-family: 'Supermercado One', cursive;
   font-size: 25px;
-  margin-top: 200px;
   text-align: center;
 }
 
-.x{
+#popUp-logo {
+  width: 120px;
+  height: 120px;
+  background-color: red;
+  margin: auto;
+}
+
+.x {
   background-image: url(../images/x.png);
   background-size: cover;
 }
 
-.o{
+.o {
   background-image: url(../images/o.png);
   background-size: cover;
 }
 
-.clear{
+.alien {
+  background-image: url(../images/alien.gif);
+  background-size: cover;
+}
+
+.hotdog {
+  background-image: url(../images/hotdog.gif);
+  background-size: cover;
+}
+
+#name-box {
+  height: 18px;
+}
+
+.logo-element #player-name{
+  display: inline-block;
+}
+
+#logo-box{
+  margin: auto;
+  width: 205px;
+  height: 200px;
+}
+.logo-element {
+  display: inline-block;
+  height: 100px;
+  width: 100px;
+}
+
+.clear {
   background-image: none;
 }
 
-#button-box {
+#button-box, #mode-box{
   border: none;
   box-shadow: none;
 }

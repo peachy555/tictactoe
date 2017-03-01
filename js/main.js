@@ -4,7 +4,6 @@
 
 
 // Things left to do
-// - Use LocalStorage
 // - Support networked multiplayer
 // - Customize player's tokens
 
@@ -14,9 +13,9 @@
 
 $(document).ready(function() {
 
-
   $winnerMessage = $('#winner-message');
-  $currentScore = $('.current-score');
+  $currentScore = $('#current-score');
+  $popUpLogo = $('#popUp-logo');
 
   var boardSize = 'normal';
 
@@ -24,19 +23,23 @@ $(document).ready(function() {
     var localGame = localStorage.getItem("tictactoeState");
     if(localGame){
       tictactoe.state = JSON.parse(localGame);
-    }
-    for (var row = 0; row < 3; row++) {
-      for (var col = 0; col< 3; col++) {
-        if (tictactoe.state.board[row][col] === 1) {
-          $('#' + row + '-' + col).removeClass("clear");
-          $('#' + row + '-' + col).addClass("o");
-        } else if (tictactoe.state.board[row][col] === 2) {
-          $('#' + row + '-' + col).removeClass("clear");
-          $('#' + row + '-' + col).addClass("x");
+      for (var row = 0; row < 3; row++) {
+        for (var col = 0; col< 3; col++) {
+          if (tictactoe.state.board[row][col] === 1) {
+            $('#' + row + '-' + col).removeClass("clear");
+            $('#' + row + '-' + col).addClass(tictactoe.state.scoreBoard.player1.logo);
+          } else if (tictactoe.state.board[row][col] === 2) {
+            $('#' + row + '-' + col).removeClass("clear");
+            $('#' + row + '-' + col).addClass(tictactoe.state.scoreBoard.player2.logo);
+          }
         }
       }
+      updateScoreboard();
+    } else {
+      // Press Enter
+      $('#game-mode-box').modal('show');
+      // $('#input-box').modal('show');
     }
-    updateScoreboard();
   }
 
   var updateScoreboard = function() {
@@ -45,17 +48,14 @@ $(document).ready(function() {
 
   var resetGame = function() {
     $("#board").fadeOut(800, function() {
-      tictactoe.state = {
-        turnCounter: 0,
-        currentPlayer: 1,
-        winner: 0,
-        board: [[0, 0, 0],
-                [0, 0, 0],
-                [0, 0, 0]],
-        scoreBoard: tictactoe.state.scoreBoard
-              };
-        $(".box").removeClass("x");
-        $(".box").removeClass("o");
+      tictactoe.state.turnCounter = 0;
+      tictactoe.state.currentPlayer = 1;
+      tictactoe.state.winner = 0;
+      tictactoe.state.board = [[0, 0, 0],
+                               [0, 0, 0],
+                               [0, 0, 0]];
+        $(".box").removeClass(tictactoe.state.scoreBoard.player1.logo);
+        $(".box").removeClass(tictactoe.state.scoreBoard.player2.logo);
         $(".box").addClass("clear");
         updateScoreboard();
         localStorage.setItem("tictactoeState", JSON.stringify(tictactoe.state));
@@ -68,7 +68,7 @@ $(document).ready(function() {
   window.tictactoe = {
 
     state: {
-      isSinglePlay: false,
+      gameMode: 'Local',
       turnCounter: 0,
       currentPlayer: 1,
       winner: 0,
@@ -78,11 +78,13 @@ $(document).ready(function() {
       scoreBoard: {
         player1: {
           name: 'Peach',
-          score: 0
+          score: 0,
+          logo: 'o'
         },
         player2: {
-          name: 'Xander',
-          score: 0
+          name: '"I"',
+          score: 0,
+          logo: 'x'
         }
       }
     },
@@ -259,50 +261,36 @@ $(document).ready(function() {
       if(this.state.currentPlayer === 1 && this.state.winner === 0 && this.state.board[row][col] === 0) {
         this.state.board[row][col] = 1;
         $('#' + row + '-' + col).removeClass("clear");
-        $('#' + row + '-' + col).addClass("o");
+        $('#' + row + '-' + col).addClass(this.state.scoreBoard.player1.logo);
         this.state.currentPlayer = 2;
         this.state.turnCounter++;
         this.checkWinner(row, col);
-        if (this.isSinglePlay && (this.state.turnCounter < 9)) {
+        if (this.state.gameMode === 'Single' && (this.state.turnCounter < 9)) {
           var resArray = this.AIturn();
           var row = resArray[0];
           var col = resArray[1];
           this.state.board[row][col] = 2;
           $('#' + row + '-' + col).removeClass("clear");
-          $('#' + row + '-' + col).addClass("x");
+          $('#' + row + '-' + col).addClass(this.state.scoreBoard.player2.logo);
           this.state.currentPlayer = 1;
           this.state.turnCounter++;
           this.checkWinner(row, col);
         }
       } else {
         if (this.state.board[row][col] === 0 && this.state.winner === 0) {
-          // if (this.isSinglePlay) {
-          //   var resArray = this.AIturn();
-          //   var row = resArray[0];
-          //   var col = resArray[1];
-          //   this.state.board[row][col] = 2;
-          //   $('#' + row + '-' + col).removeClass("clear");
-          //   $('#' + row + '-' + col).addClass("x");
-          //   this.state.currentPlayer = 1;
-          //   this.state.turnCounter++;
-          //   this.checkWinner(row, col);
-          // } else {
             this.state.board[row][col] = 2;
             $('#' + row + '-' + col).removeClass("clear");
-            $('#' + row + '-' + col).addClass("x");
+            $('#' + row + '-' + col).addClass(this.state.scoreBoard.player2.logo);
             this.state.currentPlayer = 1;
             this.state.turnCounter++;
             this.checkWinner(row, col);
-          // }
         }
       }
       localStorage.setItem("tictactoeState", JSON.stringify(tictactoe.state));
-      // console.log("state.board: " + this.state.board);
-      // console.log("winner: " + this.winner);
     },
 
     checkWinner: function(row, col) {
-      // Checking process
+      // Check for potential winner
       if ((this.state.board[row][0] === this.state.board[row][1]) && (this.state.board[row][1] === this.state.board[row][2])) {
         this.state.winner = this.state.board[row][0];
       } else if ((this.state.board[0][col] === this.state.board[1][col]) && (this.state.board[1][col] === this.state.board[2][col])) {
@@ -315,44 +303,66 @@ $(document).ready(function() {
       }
       // Winner message
       if (this.state.winner !== 0 || this.state.turnCounter === 9) {
-        if (this.state.winner !== 0) {
-          this.state.scoreBoard['player'+this.state.winner].score++;
+        if (this.state.winner === 1) {
+          this.state.scoreBoard.player1.score++;
           updateScoreboard();
-          $winnerMessage.html('The winner is player ' + this.state.winner + '!').show();
+          $popUpLogo.addClass(this.state.scoreBoard.player1.logo);
+          $winnerMessage.html(this.state.scoreBoard.player1.name + ' wins!').show();
+        } else if (this.state.winner === 2) {
+          this.state.scoreBoard.player2.score++;
+          updateScoreboard();
+          $popUpLogo.addClass(this.state.scoreBoard.player2.logo);
+          $winnerMessage.html(this.state.scoreBoard.player2.name + ' wins!').show();
         } else {
-          $winnerMessage = $('#winner-message');
           $winnerMessage.html('Draw!').show();
           updateScoreboard();
         }
-        $('.ui.modal.small').modal('show');
-
+        $('#popUp-box').modal('show');
       }
     },
   };
 
   initializeGame();
-  $('.ui.modal.small').modal('hide');
 
+  // Click on any empty slot
   $(document).on('click', '.box', function() {
     var clickedId = $(this).attr('id');
     tictactoe.getPosition(clickedId);
   });
 
+  // Inside game mode
+  $(document).on('click', '.mode', function() {
+    tictactoe.state.gameMode = $(this).html();
+    tictactoe.state.scoreBoard.player1.score = 0;
+    tictactoe.state.scoreBoard.player2.score = 0;
+    resetGame();
+    $('#game-mode-box').modal('hide');
+  });
+
+  // Local game mode button
+  $(document).on('click', '#mode-button', function() {
+    $('#game-mode-box').modal('show');
+  });
+
+  // Local new game button
   $(document).on('click', '#new-game', function() {
     resetGame();
   });
 
+  // New game button, in 'winner messave'
   $(document).on('click', '#new-game-popUp', function() {
-    $('.ui.modal.small').modal('hide');
+    $('#popUp-box').modal('hide');
     resetGame();
   });
 
+  // Reset everything
   $(document).on('click', '#clear-board', function() {
     tictactoe.state.scoreBoard.player1.score = 0;
     tictactoe.state.scoreBoard.player2.score = 0;
     resetGame();
   });
 
+  // Change board size
   $(document).on('click', '#board-size', function() {
     if (boardSize === 'normal') {
       boardSize = 'big';
@@ -367,16 +377,26 @@ $(document).ready(function() {
     }
   });
 
-  $(document).on('click', '#single-play', function() {
-    if (tictactoe.isSinglePlay === true) {
-      $('#single-play').removeClass('primary').html('Play with me');
-      tictactoe.isSinglePlay = false;
-    } else {
-      $('#single-play').addClass('primary').html('Play with AI');
-      tictactoe.isSinglePlay = true;
+  // Choosing logo in "input-box"
+  $(document).on('click', '.logo-element', function() {
+    var logoName = $(this).attr('id');
+    tictactoe.state.scoreBoard.player1.logo = logoName;
+    console.log(logoName);
+  });
+
+  // Enter game button in "input-box"
+  $(document).on('click', '#enter-game', function() {
+    tictactoe.state.scoreBoard.player1.name = $('#name-box').val();
+    $('#input-box').modal('hide');
+  });
+
+  // Press enter in "input-box"
+  $('#input-box').keypress(function(e) {
+    if(e.which == 13) {
+      tictactoe.state.scoreBoard.player1.name = $('#name-box').val();
+      $('#input-box').modal('hide');
     }
-    tictactoe.state.scoreBoard.player1.score = 0;
-    tictactoe.state.scoreBoard.player2.score = 0;
-    resetGame();
-  })
-})
+  });
+
+// End of JavaScript
+});
