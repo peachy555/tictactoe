@@ -88,7 +88,7 @@ $(document).ready(function() {
           logo: 'o'
         },
         player2: {
-          name: 'Name2',
+          name: 'AI',
           score: 0,
           logo: 'x'
         }
@@ -107,7 +107,7 @@ $(document).ready(function() {
         this.state.currentPlayer = 2;
         this.state.turnCounter++;
         this.checkWinner(row, col);
-        if (this.state.gameMode === 'Single' && (this.state.turnCounter < 9)) {
+        if (this.state.gameMode === 'Single' && this.state.winner === 0 && this.state.turnCounter<9) {
           var resArray = this.AIturn();
           var row = resArray[0];
           var col = resArray[1];
@@ -131,32 +131,15 @@ $(document).ready(function() {
       localStorage.setItem("tictactoeState", JSON.stringify(tictactoe.state));
     },
 
-    scoreEmptyBox: function() {
-      var emptySlots = [];
+    AIturn: function() {
+      var potentialPick = [];
       for (var row = 0; row < 3; row++) {
         for (var col = 0; col < 3; col++) {
           if (this.state.board[row][col] === 0) {
-            emptySlots.push([row, col]);
+            potentialPick.push([row, col]);
           }
         }
       }
-      return emptySlots;
-    },
-
-    AIdebugger: function(input) {
-      var arr = input.sort();
-      var bff = arr[0];
-      var output = [];
-      output.push(bff);
-      for (i = 1; i < arr.length; i++) {
-        if (bff !== arr[i]) {
-          output.push(arr[i]);
-          bff = arr[i];
-        }
-      }
-    },
-
-    checkForAI: function(currentBox, potentialPick) {
       var my = 3;
       var opponentWin = 50;
       var section = [];
@@ -266,7 +249,7 @@ $(document).ready(function() {
           if (i !== index) {
             for (var j = 0; j < my; j++) {
               potentialPick.push([2-i,i]);
-              console.log('my diag 2 ' + 2-i + ' ' + i);
+              console.log('my diag 2 ' + (2-i) + ' ' + i);
             }
           }
         }
@@ -281,48 +264,6 @@ $(document).ready(function() {
       }
       var randomIndex = Math.floor(Math.random()*potentialPick.length);
       return potentialPick[randomIndex];
-
-    },
-
-    AIturn: function() {
-      var emptyBoxes = this.scoreEmptyBox();
-      var potentialPick = emptyBoxes;
-      var AIchoice = this.checkForAI(emptyBoxes, potentialPick);
-
-      return AIchoice;
-    },
-
-    pushInput: function(row, col) {
-      // console.log('turnCounter ' + this.state.turnCounter);
-      // if(this.state.currentPlayer === 1 && this.state.winner === 0 && this.state.board[row][col] === 0) {
-      //   this.state.board[row][col] = 1;
-      //   $('#' + row + '-' + col).removeClass("clear");
-      //   $('#' + row + '-' + col).addClass(this.state.scoreBoard.player1.logo);
-      //   this.state.currentPlayer = 2;
-      //   this.state.turnCounter++;
-      //   this.checkWinner(row, col);
-      //   if (this.state.gameMode === 'Single' && (this.state.turnCounter < 9)) {
-      //     var resArray = this.AIturn();
-      //     var row = resArray[0];
-      //     var col = resArray[1];
-      //     this.state.board[row][col] = 2;
-      //     $('#' + row + '-' + col).removeClass("clear");
-      //     $('#' + row + '-' + col).addClass(this.state.scoreBoard.player2.logo);
-      //     this.state.currentPlayer = 1;
-      //     this.state.turnCounter++;
-      //     this.checkWinner(row, col);
-      //   }
-      // } else {
-      //   if (this.state.board[row][col] === 0 && this.state.winner === 0) {
-      //       this.state.board[row][col] = 2;
-      //       $('#' + row + '-' + col).removeClass("clear");
-      //       $('#' + row + '-' + col).addClass(this.state.scoreBoard.player2.logo);
-      //       this.state.currentPlayer = 1;
-      //       this.state.turnCounter++;
-      //       this.checkWinner(row, col);
-      //   }
-      // }
-      // localStorage.setItem("tictactoeState", JSON.stringify(tictactoe.state));
     },
 
     checkWinner: function(row, col) {
@@ -465,7 +406,7 @@ $(document).ready(function() {
       tictactoe.state.scoreBoard[selectedPlayer].name = $('#name-box').val();
       $('#name-box').val('')
       $('#input-box').modal('hide');
-      if (inputCounter<2) {
+      if (inputCounter<2 && tictactoe.state.gameMode==='Local') {
         tictactoe.state.currentPlayer = 2;
         $('#input-box').modal('show');
       } else {

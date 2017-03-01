@@ -53,6 +53,16 @@ body{
   font-family: 'Supermercado One', cursive;
   font-size: 25px;
 }
+
+#button-box, #mode-box{
+  border: none;
+  box-shadow: none;
+}
+
+#popUp-box {
+background-color: #fefefe;
+}
+
 #winner-message, #mode-message{
   margin: 10px;
   font-family: 'Supermercado One', cursive;
@@ -112,14 +122,4 @@ body{
 
 .clear {
   background-image: none;
-}
-
-#button-box, #mode-box{
-  border: none;
-  box-shadow: none;
-}
-
-
-#popUp-box {
-background-color: #fefefe;
 }
