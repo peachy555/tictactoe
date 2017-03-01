@@ -5,7 +5,6 @@
 
 // Things left to do
 // - Support networked multiplayer
-// - Customize player's tokens
 
 
 // var myFirebaseRef = new Firebase("https://tictactoe-e7931.firebaseio.com/");
@@ -22,6 +21,7 @@ $(document).ready(function() {
 
   var initializeGame = function() {
     var localGame = localStorage.getItem("tictactoeState");
+    // Load previous data
     if(localGame){
       tictactoe.state = JSON.parse(localGame);
       for (var row = 0; row < 3; row++) {
@@ -36,16 +36,18 @@ $(document).ready(function() {
         }
       }
       updateScoreboard();
+      // Get new player data
     } else {
-      // Press Enter
       $('#init-game-mode-box').modal('show');
     }
   }
 
+  // Update score board
   var updateScoreboard = function() {
     $currentScore.html(tictactoe.state.scoreBoard.player1.score + ' - ' + tictactoe.state.scoreBoard.player2.score);
   }
 
+  // Reset game stat
   var resetGame = function() {
     $("#board").fadeOut(800, function() {
       tictactoe.state.turnCounter = 0;
@@ -56,14 +58,18 @@ $(document).ready(function() {
                                [0, 0, 0]];
         $(".box").removeClass(tictactoe.state.scoreBoard.player1.logo);
         $(".box").removeClass(tictactoe.state.scoreBoard.player2.logo);
+        $(".box").removeClass('draw');
         $(".box").addClass("clear");
+        $(".popUp-logo").removeClass(tictactoe.state.scoreBoard.player1.logo);
+        $(".popUp-logo").removeClass(tictactoe.state.scoreBoard.player2.logo);
+        $(".popUp-logo").removeClass('draw');
+        $(".popUp-logo").addClass("clear");
         updateScoreboard();
         localStorage.setItem("tictactoeState", JSON.stringify(tictactoe.state));
     });
     $("#board").fadeIn(800);
 
   };
-
 
   window.tictactoe = {
 
@@ -92,7 +98,37 @@ $(document).ready(function() {
     getPosition: function(boxId) {
       var row = boxId[0];
       var col = boxId[2];
-      this.pushInput(row, col);
+      // this.pushInput(row, col);
+      console.log('turnCounter ' + this.state.turnCounter);
+      if(this.state.currentPlayer === 1 && this.state.winner === 0 && this.state.board[row][col] === 0) {
+        this.state.board[row][col] = 1;
+        $('#' + row + '-' + col).removeClass("clear");
+        $('#' + row + '-' + col).addClass(this.state.scoreBoard.player1.logo);
+        this.state.currentPlayer = 2;
+        this.state.turnCounter++;
+        this.checkWinner(row, col);
+        if (this.state.gameMode === 'Single' && (this.state.turnCounter < 9)) {
+          var resArray = this.AIturn();
+          var row = resArray[0];
+          var col = resArray[1];
+          this.state.board[row][col] = 2;
+          $('#' + row + '-' + col).removeClass("clear");
+          $('#' + row + '-' + col).addClass(this.state.scoreBoard.player2.logo);
+          this.state.currentPlayer = 1;
+          this.state.turnCounter++;
+          this.checkWinner(row, col);
+        }
+      } else {
+        if (this.state.board[row][col] === 0 && this.state.winner === 0) {
+            this.state.board[row][col] = 2;
+            $('#' + row + '-' + col).removeClass("clear");
+            $('#' + row + '-' + col).addClass(this.state.scoreBoard.player2.logo);
+            this.state.currentPlayer = 1;
+            this.state.turnCounter++;
+            this.checkWinner(row, col);
+        }
+      }
+      localStorage.setItem("tictactoeState", JSON.stringify(tictactoe.state));
     },
 
     scoreEmptyBox: function() {
@@ -257,36 +293,36 @@ $(document).ready(function() {
     },
 
     pushInput: function(row, col) {
-      console.log('turnCounter ' + this.state.turnCounter);
-      if(this.state.currentPlayer === 1 && this.state.winner === 0 && this.state.board[row][col] === 0) {
-        this.state.board[row][col] = 1;
-        $('#' + row + '-' + col).removeClass("clear");
-        $('#' + row + '-' + col).addClass(this.state.scoreBoard.player1.logo);
-        this.state.currentPlayer = 2;
-        this.state.turnCounter++;
-        this.checkWinner(row, col);
-        if (this.state.gameMode === 'Single' && (this.state.turnCounter < 9)) {
-          var resArray = this.AIturn();
-          var row = resArray[0];
-          var col = resArray[1];
-          this.state.board[row][col] = 2;
-          $('#' + row + '-' + col).removeClass("clear");
-          $('#' + row + '-' + col).addClass(this.state.scoreBoard.player2.logo);
-          this.state.currentPlayer = 1;
-          this.state.turnCounter++;
-          this.checkWinner(row, col);
-        }
-      } else {
-        if (this.state.board[row][col] === 0 && this.state.winner === 0) {
-            this.state.board[row][col] = 2;
-            $('#' + row + '-' + col).removeClass("clear");
-            $('#' + row + '-' + col).addClass(this.state.scoreBoard.player2.logo);
-            this.state.currentPlayer = 1;
-            this.state.turnCounter++;
-            this.checkWinner(row, col);
-        }
-      }
-      localStorage.setItem("tictactoeState", JSON.stringify(tictactoe.state));
+      // console.log('turnCounter ' + this.state.turnCounter);
+      // if(this.state.currentPlayer === 1 && this.state.winner === 0 && this.state.board[row][col] === 0) {
+      //   this.state.board[row][col] = 1;
+      //   $('#' + row + '-' + col).removeClass("clear");
+      //   $('#' + row + '-' + col).addClass(this.state.scoreBoard.player1.logo);
+      //   this.state.currentPlayer = 2;
+      //   this.state.turnCounter++;
+      //   this.checkWinner(row, col);
+      //   if (this.state.gameMode === 'Single' && (this.state.turnCounter < 9)) {
+      //     var resArray = this.AIturn();
+      //     var row = resArray[0];
+      //     var col = resArray[1];
+      //     this.state.board[row][col] = 2;
+      //     $('#' + row + '-' + col).removeClass("clear");
+      //     $('#' + row + '-' + col).addClass(this.state.scoreBoard.player2.logo);
+      //     this.state.currentPlayer = 1;
+      //     this.state.turnCounter++;
+      //     this.checkWinner(row, col);
+      //   }
+      // } else {
+      //   if (this.state.board[row][col] === 0 && this.state.winner === 0) {
+      //       this.state.board[row][col] = 2;
+      //       $('#' + row + '-' + col).removeClass("clear");
+      //       $('#' + row + '-' + col).addClass(this.state.scoreBoard.player2.logo);
+      //       this.state.currentPlayer = 1;
+      //       this.state.turnCounter++;
+      //       this.checkWinner(row, col);
+      //   }
+      // }
+      // localStorage.setItem("tictactoeState", JSON.stringify(tictactoe.state));
     },
 
     checkWinner: function(row, col) {
@@ -306,14 +342,20 @@ $(document).ready(function() {
         if (this.state.winner === 1) {
           this.state.scoreBoard.player1.score++;
           updateScoreboard();
+          $popUpLogo.removeClass('draw');
+          $popUpLogo.removeClass(this.state.scoreBoard.player2.logo);
           $popUpLogo.addClass(this.state.scoreBoard.player1.logo);
           $winnerMessage.html(this.state.scoreBoard.player1.name + ' wins!').show();
         } else if (this.state.winner === 2) {
           this.state.scoreBoard.player2.score++;
           updateScoreboard();
+          $popUpLogo.removeClass('draw');
+          $popUpLogo.removeClass(this.state.scoreBoard.player1.logo);
           $popUpLogo.addClass(this.state.scoreBoard.player2.logo);
           $winnerMessage.html(this.state.scoreBoard.player2.name + ' wins!').show();
         } else {
+          $popUpLogo.removeClass(this.state.scoreBoard.player1.logo);
+          $popUpLogo.removeClass(this.state.scoreBoard.player2.logo);
           $popUpLogo.addClass('draw');
           $winnerMessage.html('Draw!').show();
           updateScoreboard();
