@@ -144,7 +144,7 @@ $(document).ready(function() {
       }
       var my1 = 3;
       var my2 = 5;
-      var opponentWin = 50;
+      var opponentWin = 100;
       var section = [];
       // Check row
       for (var row = 0; row < 3 ; row++) {
