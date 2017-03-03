@@ -156,6 +156,7 @@ $(document).ready(function() {
         var my2 = 5;
         var opponentWin = 200;
       }
+
       var section = [];
       // Check row
       for (var row = 0; row < 3 ; row++) {
@@ -360,6 +361,8 @@ $(document).ready(function() {
   };
 
   initializeGame();
+  var selectedPlayer ='player'+tictactoe.state.currentPlayer;
+
 
 
   // Click on any empty slot
@@ -385,9 +388,10 @@ $(document).ready(function() {
   $(document).on('click', '#init-single-mode', function() {
     tictactoe.state.currentPlayer = 1;
     $('#input-box').modal('show');
+
   });
 
-  // init-single-mode clicked
+  // init-online-mode clicked
   $(document).on('click', '#init-online-mode', function() {
     gameState.update({
       "scoreBoard/gameMode": tictactoe.state.gameMode
@@ -478,6 +482,7 @@ $(document).ready(function() {
 
   var getNameLogo = function() {
     tictactoe.state.scoreBoard['player'+tictactoe.state.currentPlayer].name = $('#name-box').val();
+
     $('#name-box').val('')
     $('#input-box').modal('hide');
 
