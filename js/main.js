@@ -469,6 +469,12 @@ $(document).ready(function() {
     tictactoe.state.scoreBoard['player'+tictactoe.state.currentPlayer].logo = logoName;
   });
 
+  // Selecting AI mode
+  $(document).on('click', '#AI-dropdown .each.item', function() {
+    tictactoe.state.AImode = $(this).attr('value');
+    console.log(tictactoe.state.AImode);
+  });
+
 
   var getNameLogo = function() {
     tictactoe.state.scoreBoard['player'+tictactoe.state.currentPlayer].name = $('#name-box').val();
