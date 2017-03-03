@@ -95,7 +95,8 @@ $(document).ready(function() {
           score: 0,
           logo: 'x'
         }
-      }
+      },
+      AImode: 'Greedy',
     },
 
     getPosition: function(boxId) {
@@ -142,9 +143,19 @@ $(document).ready(function() {
           }
         }
       }
-      var my1 = 3;
-      var my2 = 5;
-      var opponentWin = 100;
+      if (this.state.AImode === 'Stupid') {
+        var my1 = 1;
+        var my2 = 1;
+        var opponentWin = 1;
+      } else if (this.state.AImode === 'Greedy') {
+        var my1 = 3;
+        var my2 = 100;
+        var opponentWin = 80;
+      } else if (this.state.AImode === 'PlaySafe') {
+        var my1 = 3;
+        var my2 = 5;
+        var opponentWin = 200;
+      }
       var section = [];
       // Check row
       for (var row = 0; row < 3 ; row++) {
@@ -349,7 +360,6 @@ $(document).ready(function() {
   };
 
   initializeGame();
-  var selectedPlayer ='player'+tictactoe.state.currentPlayer;
 
 
   // Click on any empty slot
@@ -386,7 +396,7 @@ $(document).ready(function() {
     $('#input-box').modal('show');
   });
 
-  // init-single-mode clicked
+  // init-local-mode clicked
   $(document).on('click', '#init-local-mode', function() {
     tictactoe.state.currentPlayer = 1;
     $('#input-box').modal('show');
@@ -410,11 +420,32 @@ $(document).ready(function() {
     resetGame();
   });
 
-  // Reset everything
+  // Reset game stat
   $(document).on('click', '#clear-board', function() {
     tictactoe.state.scoreBoard.player1.score = 0;
     tictactoe.state.scoreBoard.player2.score = 0;
     resetGame();
+  });
+
+  // Reset user data on localStorage
+  $(document).on('click', '#reset-user', function() {
+    tictactoe.state.scoreBoard = {
+      player1: {
+        name: 'Name1',
+        score: 0,
+        logo: 'o'
+      },
+      player2: {
+        name: 'AI',
+        score: 0,
+        logo: 'x'
+      }
+    }
+    localStorage.removeItem("tictactoeState");
+    tictactoe.state.scoreBoard.player1.score = 0;
+    tictactoe.state.scoreBoard.player2.score = 0;
+    resetGame();
+    $('#init-game-mode-box').modal('show');
   });
 
   // Change board size
@@ -434,13 +465,13 @@ $(document).ready(function() {
 
   // Choosing logo in "input-box"
   $(document).on('click', '.logo-element', function() {
-    var logoName = $(this).attr('id');
-    tictactoe.state.scoreBoard[selectedPlayer].logo = logoName;
+    var logoName = $(this).attr('value');
+    tictactoe.state.scoreBoard['player'+tictactoe.state.currentPlayer].logo = logoName;
   });
 
 
   var getNameLogo = function() {
-    tictactoe.state.scoreBoard[selectedPlayer].name = $('#name-box').val();
+    tictactoe.state.scoreBoard['player'+tictactoe.state.currentPlayer].name = $('#name-box').val();
     $('#name-box').val('')
     $('#input-box').modal('hide');
 
@@ -452,17 +483,15 @@ $(document).ready(function() {
           "logo": tictactoe.state.scoreBoard.player1.logo
         }
       });
-      // gameState.child('scoreBoard').child('player1').child('name').set(tictactoe.state.scoreBoard.player1.name);
-      // gameState.child('scoreBoard').child('player1').child('logo').set(tictactoe.state.scoreBoard.player1.logo);
     }
 
     if (inputCounter<2 && tictactoe.state.gameMode==='Local') {
       tictactoe.state.currentPlayer = 2;
-      $('#input-box').modal('show');
+      $('#input-box2').modal('show');
+      inputCounter++;
     } else {
       tictactoe.state.currentPlayer = 1;
     }
-    inputCounter++;
   }
 
   // Enter game button in "input-box"
@@ -472,6 +501,25 @@ $(document).ready(function() {
   $('#input-box').keypress(function(e) {
     if(e.which == 13) {
       getNameLogo();
+    }
+  });
+
+  // Input box for player2
+  var getNameLogo2 = function() {
+    tictactoe.state.scoreBoard.player2.name = $('#name-box2').val();
+    $('#name-box2').val('')
+    $('#input-box2').modal('hide');
+    tictactoe.state.currentPlayer = 1;
+    inputCounter = 0;
+  }
+
+  // Enter game button in "input-box", player2
+  $(document).on('click', '#enter-game2', getNameLogo2);
+
+  // Press enter in "input-box", player2
+  $('#input-box2').keypress(function(e) {
+    if(e.which == 13) {
+      getNameLogo2();
     }
   });
 

@@ -56,7 +56,19 @@
     <button id="new-game" class="ui primary button">New Game</button>
     <button id="board-size" class="ui button">Bigger!!!!</button>
     <button id="clear-board" class="ui button">Restart!</button>
+    <button id="reset-user" class="ui button">New User!</button>
     <button id="mode-button" class="ui button">Game Mode!</button>
+    <div id="AI-dropdown" class="ui compact menu">
+      <div class="ui simple dropdown item">
+        Select AI
+        <i class="dropdown icon"></i>
+        <div class="menu">
+          <div id='Stupid' class="item">Stupid!</div>
+          <div id='Greedy' class="item">Greedy!</div>
+          <div id='PlaySafe' class="item">Play Safe!</div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- winner message -->
@@ -102,31 +114,57 @@
     </div>
   </div>
 
-  <!-- input box at the start -->
-  <div id="input-box" class="ui small modal">
-    <div class="image content">
-      <div class="description">
-        <div id="logo-box">
-          <div class="logo-row">
-            <div id="x" class="x logo-element"></div>
-            <div id="o" class="o logo-element"></div>
+    <!-- input box at the start -->
+    <div id="input-box" class="ui small modal">
+      <div class="image content">
+        <div class="description">
+          <div id="logo-box">
+            <div class="logo-row">
+              <div value="x" class="x logo-element"></div>
+              <div value="o" class="o logo-element"></div>
+            </div>
+            <div class="logo-row">
+              <div value="alien" class="alien logo-element"></div>
+              <div value="hotdog" class="hotdog logo-element"></div>
+            </div>
           </div>
-          <div class="logo-row">
-            <div id="alien" class="alien logo-element"></div>
-            <div id="hotdog" class="hotdog logo-element"></div>
+          <div id="player-name" class="ui middle">
+            <div class="ui input">
+              <input id="name-box" type="text" placeholder="Your Name!">
+            </div>
           </div>
-        </div>
-        <div id="player-name" class="ui middle">
-          <div class="ui input">
-            <input id="name-box" type="text" placeholder="Your Name!">
+          <div id="button-box" class="ui center aligned segment">
+            <button id="enter-game" class="ui centered primary button">Let's Start!</button>
           </div>
-        </div>
-        <div id="button-box" class="ui center aligned segment">
-          <button id="enter-game" class="ui centered primary button">Let's Start!</button>
         </div>
       </div>
     </div>
-  </div>
+
+    <!-- input box at the start (for player2)-->
+    <div id="input-box2" class="ui small modal">
+      <div class="image content">
+        <div class="description">
+          <div id="logo-box2">
+            <div class="logo-row">
+              <div value="x" class="x logo-element"></div>
+              <div value="o" class="o logo-element"></div>
+            </div>
+            <div class="logo-row">
+              <div value="alien" class="alien logo-element"></div>
+              <div value="hotdog" class="hotdog logo-element"></div>
+            </div>
+          </div>
+          <div id="player2-name" class="ui middle">
+            <div class="ui input">
+              <input id="name-box2" type="text" placeholder="Your Name!">
+            </div>
+          </div>
+          <div id="button-box2" class="ui center aligned segment">
+            <button id="enter-game2" class="ui centered primary button">Let's Start!</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
 </body>
 </html>
