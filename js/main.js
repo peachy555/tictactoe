@@ -7,10 +7,13 @@
 // - Support networked multiplayer
 
 
-// var myFirebaseRef = new Firebase("https://tictactoe-e7931.firebaseio.com/");
 // window.firebaseExample = new Firebase('https://docs-examples.firebaseio.com/web/data');
 
 $(document).ready(function() {
+
+  var myFirebaseRef = new Firebase("https://tictactoe-e7931.firebaseio.com/");
+  var gameState = myFirebaseRef.child('game').child('state');
+
 
   $winnerMessage = $('#winner-message');
   $currentScore = $('#current-score');
@@ -99,7 +102,6 @@ $(document).ready(function() {
       var row = boxId[0];
       var col = boxId[2];
       // this.pushInput(row, col);
-      console.log('turnCounter ' + this.state.turnCounter);
       if(this.state.currentPlayer === 1 && this.state.winner === 0 && this.state.board[row][col] === 0) {
         this.state.board[row][col] = 1;
         $('#' + row + '-' + col).removeClass("clear");
@@ -140,8 +142,9 @@ $(document).ready(function() {
           }
         }
       }
-      var my = 3;
-      var opponentWin = 50;
+      var my1 = 3;
+      var my2 = 5;
+      var opponentWin = 100;
       var section = [];
       // Check row
       for (var row = 0; row < 3 ; row++) {
@@ -159,9 +162,19 @@ $(document).ready(function() {
           var index = section.indexOf(2);
           for (var i = 0; i < 3; i++) {
             if (i !== index) {
-              for (var j = 0; j < my; j++) {
+              for (var j = 0; j < my1; j++) {
                 potentialPick.push([row,i]);
-                console.log('my row ' + row + ' ' + i);
+              }
+            }
+          }
+        }
+        if (section.sort().toString() === [0,2,2].toString()) {
+          section = [this.state.board[row][0], this.state.board[row][1], this.state.board[row][2]];
+          var index = section.indexOf(2);
+          for (var i = 0; i < 3; i++) {
+            if (i !== index) {
+              for (var j = 0; j < my2; j++) {
+                potentialPick.push([row,i]);
               }
             }
           }
@@ -172,7 +185,6 @@ $(document).ready(function() {
           var index = section.indexOf(0);
           for (var j = 0; j < opponentWin; j++) {
             potentialPick.push([row,index]);
-            console.log('opponent row ' + row + ' ' + index);
           }
         }
       }
@@ -193,9 +205,20 @@ $(document).ready(function() {
           var index = section.indexOf(2);
           for (var i = 0; i < 3; i++) {
             if (i !== index) {
-              for (var j = 0; j < my; j++) {
+              for (var j = 0; j < my1; j++) {
                 potentialPick.push([i,col]);
-                console.log('my col ' + i + ' ' + col);
+              }
+            }
+          }
+        }
+        section = [this.state.board[0][col], this.state.board[1][col], this.state.board[2][col]];
+        if (section.sort().toString() === [0,2,2].toString()) {
+          section = [this.state.board[0][col], this.state.board[1][col], this.state.board[2][col]];
+          var index = section.indexOf(2);
+          for (var i = 0; i < 3; i++) {
+            if (i !== index) {
+              for (var j = 0; j < my2; j++) {
+                potentialPick.push([i,col]);
               }
             }
           }
@@ -205,7 +228,6 @@ $(document).ready(function() {
           var index = section.indexOf(0);
           for (var j = 0; j < opponentWin; j++) {
             potentialPick.push([index,col]);
-            console.log('opponent col ' + index + ' ' + col);
           }
         }
       }
@@ -226,9 +248,20 @@ $(document).ready(function() {
         var index = section.indexOf(2);
         for (var i = 0; i < 3; i++) {
           if (i !== index) {
-            for (var j = 0; j < my; j++) {
+            for (var j = 0; j < my1; j++) {
               potentialPick.push([i,i]);
-              console.log('my diag 1 ' + i + ' ' + i);
+            }
+          }
+        }
+      }
+      section = [this.state.board[0][0], this.state.board[1][1], this.state.board[2][2]];
+      if (section.sort().toString() === [0,2,2].toString()) {
+        section = [this.state.board[0][0], this.state.board[1][1], this.state.board[2][2]];
+        var index = section.indexOf(2);
+        for (var i = 0; i < 3; i++) {
+          if (i !== index) {
+            for (var j = 0; j < my2; j++) {
+              potentialPick.push([i,i]);
             }
           }
         }
@@ -238,7 +271,6 @@ $(document).ready(function() {
         var index = section.indexOf(0);
         for (var j = 0; j < opponentWin; j++) {
           potentialPick.push([index,index]);
-          console.log('opponent diag 1 ' + index + ' ' + index);
         }
       }
       section = [this.state.board[2][0], this.state.board[1][1], this.state.board[0][2]];
@@ -247,9 +279,20 @@ $(document).ready(function() {
         var index = section.indexOf(2);
         for (var i = 0; i < 3; i++) {
           if (i !== index) {
-            for (var j = 0; j < my; j++) {
+            for (var j = 0; j < my1; j++) {
               potentialPick.push([2-i,i]);
-              console.log('my diag 2 ' + (2-i) + ' ' + i);
+            }
+          }
+        }
+      }
+      section = [this.state.board[2][0], this.state.board[1][1], this.state.board[0][2]];
+      if (section.sort().toString() === [0,0,2].toString()) {
+        section = [this.state.board[2][0], this.state.board[1][1], this.state.board[0][2]];
+        var index = section.indexOf(2);
+        for (var i = 0; i < 3; i++) {
+          if (i !== index) {
+            for (var j = 0; j < my2; j++) {
+              potentialPick.push([2-i,i]);
             }
           }
         }
@@ -259,7 +302,6 @@ $(document).ready(function() {
         var index = section.indexOf(0);
         for (var j = 0; j < opponentWin; j++) {
           potentialPick.push([2-index,index]);
-          console.log('opponent diag 2 ' + 2-index + ' ' + index);
         }
       }
       var randomIndex = Math.floor(Math.random()*potentialPick.length);
@@ -307,6 +349,8 @@ $(document).ready(function() {
   };
 
   initializeGame();
+  var selectedPlayer ='player'+tictactoe.state.currentPlayer;
+
 
   // Click on any empty slot
   $(document).on('click', '.box', function() {
@@ -317,14 +361,27 @@ $(document).ready(function() {
   // Inside game mode
   $(document).on('click', '.mode', function() {
     tictactoe.state.gameMode = $(this).html();
+    if (tictactoe.state.gameMode === 'Online') {
+      gameState.child('gameMode').set('Online');
+    }
     tictactoe.state.scoreBoard.player1.score = 0;
     tictactoe.state.scoreBoard.player2.score = 0;
     resetGame();
-    $('#game-mode-box').modal('hide');
+    $('#init-game-mode-box').modal('hide');
+    $('#input-box').modal('show');
   });
 
   // init-single-mode clicked
   $(document).on('click', '#init-single-mode', function() {
+    tictactoe.state.currentPlayer = 1;
+    $('#input-box').modal('show');
+  });
+
+  // init-single-mode clicked
+  $(document).on('click', '#init-online-mode', function() {
+    gameState.update({
+      "scoreBoard/gameMode": tictactoe.state.gameMode
+    });
     tictactoe.state.currentPlayer = 1;
     $('#input-box').modal('show');
   });
@@ -378,41 +435,43 @@ $(document).ready(function() {
   // Choosing logo in "input-box"
   $(document).on('click', '.logo-element', function() {
     var logoName = $(this).attr('id');
-    var selectedPlayer ='player'+tictactoe.state.currentPlayer;
     tictactoe.state.scoreBoard[selectedPlayer].logo = logoName;
-    console.log(logoName);
   });
 
-  // Enter game button in "input-box"
-  $(document).on('click', '#enter-game', function() {
-    var selectedPlayer ='player'+tictactoe.state.currentPlayer;
+
+  var getNameLogo = function() {
     tictactoe.state.scoreBoard[selectedPlayer].name = $('#name-box').val();
     $('#name-box').val('')
     $('#input-box').modal('hide');
-    if (inputCounter<2) {
+
+    if (tictactoe.state.gameMode === 'Online') {
+      // Firebase stuff
+      gameState.update({
+        "scoreBoard/player1": {
+          "name": tictactoe.state.scoreBoard.player1.name,
+          "logo": tictactoe.state.scoreBoard.player1.logo
+        }
+      });
+      // gameState.child('scoreBoard').child('player1').child('name').set(tictactoe.state.scoreBoard.player1.name);
+      // gameState.child('scoreBoard').child('player1').child('logo').set(tictactoe.state.scoreBoard.player1.logo);
+    }
+
+    if (inputCounter<2 && tictactoe.state.gameMode==='Local') {
       tictactoe.state.currentPlayer = 2;
       $('#input-box').modal('show');
     } else {
       tictactoe.state.currentPlayer = 1;
     }
     inputCounter++;
+  }
 
-  });
+  // Enter game button in "input-box"
+  $(document).on('click', '#enter-game', getNameLogo);
 
   // Press enter in "input-box"
   $('#input-box').keypress(function(e) {
     if(e.which == 13) {
-      var selectedPlayer ='player'+tictactoe.state.currentPlayer;
-      tictactoe.state.scoreBoard[selectedPlayer].name = $('#name-box').val();
-      $('#name-box').val('')
-      $('#input-box').modal('hide');
-      if (inputCounter<2 && tictactoe.state.gameMode==='Local') {
-        tictactoe.state.currentPlayer = 2;
-        $('#input-box').modal('show');
-      } else {
-        tictactoe.state.currentPlayer = 1;
-      }
-      inputCounter++;
+      getNameLogo();
     }
   });
 
