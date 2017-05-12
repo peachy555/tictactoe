@@ -17,6 +17,10 @@ $(document).ready(function() {
   var gameState = myFirebaseRef.child('game').child('state');
 
 
+  var myFirebaseRef = new Firebase("https://tictactoe-e7931.firebaseio.com/");
+  var gameState = myFirebaseRef.child('game').child('state');
+
+
   $winnerMessage = $('#winner-message');
   $currentScore = $('#current-score');
   $popUpLogo = $('#popUp-logo');
@@ -160,7 +164,7 @@ $(document).ready(function() {
         var my2 = 5;
         var opponentWin = 200;
       }
-
+x
       var section = [];
       // Check row
       for (var row = 0; row < 3 ; row++) {
@@ -482,6 +486,7 @@ $(document).ready(function() {
 
   // Choosing logo in "input-box"
   $(document).on('click', '.logo-element', function() {
+// <<<<<<< HEAD
     var logoName = $(this).attr('value');
     tictactoe.state.scoreBoard['player'+tictactoe.state.currentPlayer].logo = logoName;
   });
@@ -496,6 +501,13 @@ $(document).ready(function() {
   var getNameLogo = function() {
     tictactoe.state.scoreBoard['player'+tictactoe.state.currentPlayer].name = $('#name-box').val();
 
+  //   var logoName = $(this).attr('id');
+  //   tictactoe.state.scoreBoard[selectedPlayer].logo = logoName;
+  // });
+  //
+  //
+  // var getNameLogo = function() {
+  //   tictactoe.state.scoreBoard[selectedPlayer].name = $('#name-box').val();
     $('#name-box').val('')
     $('#input-box').modal('hide');
 
@@ -507,6 +519,8 @@ $(document).ready(function() {
           "logo": tictactoe.state.scoreBoard.player1.logo
         }
       });
+      // gameState.child('scoreBoard').child('player1').child('name').set(tictactoe.state.scoreBoard.player1.name);
+      // gameState.child('scoreBoard').child('player1').child('logo').set(tictactoe.state.scoreBoard.player1.logo);
     }
 
     if (inputCounter<2 && tictactoe.state.gameMode==='Local') {
@@ -516,6 +530,7 @@ $(document).ready(function() {
     } else {
       tictactoe.state.currentPlayer = 1;
     }
+    inputCounter++;
   }
 
   // Enter game button in "input-box"

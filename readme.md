@@ -21,7 +21,11 @@ The game page will keep track of current game, win tally, and player's informati
 All data will have backup stored in `localStorage`, which will be restore after the page was reloaded
 
 Changes to user's information (icon and name) can be made by opening the game in different platform
+<<<<<<< HEAD
 or run JavaScript code `localStorage.removeItem("tictactoeState")` to remove data in `localStorage`.
+=======
+or run `localStorage.removeItem("tictactoeState")` to remove data in `localStorage`
+>>>>>>> 533f182a3fadb57801f34e9167c1f973b78217ec
 
 On the menu bar below game board (from left to right):
  * New game: to reset current game
@@ -62,6 +66,7 @@ and `parse` back to object (using JSON methods) to restore data.
 
 ### Firebase
 Firebase is partially implemented into the code, but not fully functional.
+<<<<<<< HEAD
 
 ## Further Improvements & Issues
 * popup page for AI's difficulty can be implement by:
@@ -75,3 +80,5 @@ Firebase is partially implemented into the code, but not fully functional.
 * Finish multiplayer (online) mode.
 
 * Display/hide AI dropdown only when the game is on 'Single' mode.
+=======
+>>>>>>> 533f182a3fadb57801f34e9167c1f973b78217ec
