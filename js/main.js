@@ -10,6 +10,8 @@
 // window.firebaseExample = new Firebase('https://docs-examples.firebaseio.com/web/data');
 
 $(document).ready(function() {
+  $('#AI-dropdown').hide();
+
 
   var myFirebaseRef = new Firebase("https://tictactoe-e7931.firebaseio.com/");
   var gameState = myFirebaseRef.child('game').child('state');
@@ -43,6 +45,10 @@ $(document).ready(function() {
     } else {
       $('#init-game-mode-box').modal('show');
     }
+
+    if(JSON.parse(localStorage.tictactoeState).gameMode === 'Single') {
+      $('#AI-dropdown').show();
+    }
   }
 
   // Update score board
@@ -71,11 +77,9 @@ $(document).ready(function() {
         localStorage.setItem("tictactoeState", JSON.stringify(tictactoe.state));
     });
     $("#board").fadeIn(800);
-
   };
 
   window.tictactoe = {
-
     state: {
       gameMode: 'Local',
       turnCounter: 0,
@@ -156,6 +160,7 @@ $(document).ready(function() {
         var my2 = 5;
         var opponentWin = 200;
       }
+
       var section = [];
       // Check row
       for (var row = 0; row < 3 ; row++) {
@@ -360,7 +365,13 @@ $(document).ready(function() {
   };
 
   initializeGame();
+  var selectedPlayer ='player'+tictactoe.state.currentPlayer;
 
+  if(tictactoe.state.gameMode === 'Single') {
+    $('#AI-dropdown').show();
+  } else {
+    $('#AI-dropdown').hide();
+  }
 
   // Click on any empty slot
   $(document).on('click', '.box', function() {
@@ -379,15 +390,21 @@ $(document).ready(function() {
     resetGame();
     $('#init-game-mode-box').modal('hide');
     $('#input-box').modal('show');
+    if(tictactoe.state.gameMode === 'Single') {
+      $('#AI-dropdown').show();
+    } else {
+      $('#AI-dropdown').hide();
+    }
   });
 
   // init-single-mode clicked
   $(document).on('click', '#init-single-mode', function() {
     tictactoe.state.currentPlayer = 1;
     $('#input-box').modal('show');
+
   });
 
-  // init-single-mode clicked
+  // init-online-mode clicked
   $(document).on('click', '#init-online-mode', function() {
     gameState.update({
       "scoreBoard/gameMode": tictactoe.state.gameMode
@@ -469,9 +486,16 @@ $(document).ready(function() {
     tictactoe.state.scoreBoard['player'+tictactoe.state.currentPlayer].logo = logoName;
   });
 
+  // Selecting AI mode
+  $(document).on('click', '#AI-dropdown .each.item', function() {
+    tictactoe.state.AImode = $(this).attr('value');
+    console.log(tictactoe.state.AImode);
+  });
+
 
   var getNameLogo = function() {
     tictactoe.state.scoreBoard['player'+tictactoe.state.currentPlayer].name = $('#name-box').val();
+
     $('#name-box').val('')
     $('#input-box').modal('hide');
 
@@ -511,6 +535,7 @@ $(document).ready(function() {
     $('#input-box2').modal('hide');
     tictactoe.state.currentPlayer = 1;
     inputCounter = 0;
+
   }
 
   // Enter game button in "input-box", player2

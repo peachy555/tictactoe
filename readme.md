@@ -69,6 +69,9 @@ Firebase is partially implemented into the code, but not fully functional.
   * create event listeners for 'difficulty' buttons and function to
     map the marking scheme with corresponding to difficulty selected.
 
+
 * Game board will left align when the window is too small (may be something to do with Semantic UI).
 
 * Finish multiplayer (online) mode.
+
+* Display/hide AI dropdown only when the game is on 'Single' mode.
