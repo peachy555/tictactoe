@@ -10,8 +10,6 @@
 // window.firebaseExample = new Firebase('https://docs-examples.firebaseio.com/web/data');
 
 $(document).ready(function() {
-  $('#AI-dropdown').hide();
-
 
   var myFirebaseRef = new Firebase("https://tictactoe-e7931.firebaseio.com/");
   var gameState = myFirebaseRef.child('game').child('state');
@@ -46,8 +44,10 @@ $(document).ready(function() {
       $('#init-game-mode-box').modal('show');
     }
 
-    if(JSON.parse(localStorage.tictactoeState).gameMode === 'Single') {
+    if(tictactoe.state.gameMode === 'Single') {
       $('#AI-dropdown').show();
+    } else {
+      $('#AI-dropdown').hide();
     }
   }
 
@@ -77,6 +77,12 @@ $(document).ready(function() {
         localStorage.setItem("tictactoeState", JSON.stringify(tictactoe.state));
     });
     $("#board").fadeIn(800);
+
+    if(tictactoe.state.gameMode === 'Single') {
+      $('#AI-dropdown').show();
+    } else {
+      $('#AI-dropdown').hide();
+    }
   };
 
   window.tictactoe = {
@@ -390,6 +396,7 @@ $(document).ready(function() {
     resetGame();
     $('#init-game-mode-box').modal('hide');
     $('#input-box').modal('show');
+
     if(tictactoe.state.gameMode === 'Single') {
       $('#AI-dropdown').show();
     } else {
