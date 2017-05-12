@@ -10,6 +10,8 @@
 // window.firebaseExample = new Firebase('https://docs-examples.firebaseio.com/web/data');
 
 $(document).ready(function() {
+  $('#AI-dropdown').hide();
+
 
   var myFirebaseRef = new Firebase("https://tictactoe-e7931.firebaseio.com/");
   var gameState = myFirebaseRef.child('game').child('state');
@@ -43,6 +45,10 @@ $(document).ready(function() {
     } else {
       $('#init-game-mode-box').modal('show');
     }
+
+    if(JSON.parse(localStorage.tictactoeState).gameMode === 'Single') {
+      $('#AI-dropdown').show();
+    }
   }
 
   // Update score board
@@ -71,11 +77,9 @@ $(document).ready(function() {
         localStorage.setItem("tictactoeState", JSON.stringify(tictactoe.state));
     });
     $("#board").fadeIn(800);
-
   };
 
   window.tictactoe = {
-
     state: {
       gameMode: 'Local',
       turnCounter: 0,
@@ -363,7 +367,11 @@ $(document).ready(function() {
   initializeGame();
   var selectedPlayer ='player'+tictactoe.state.currentPlayer;
 
-
+  if(tictactoe.state.gameMode === 'Single') {
+    $('#AI-dropdown').show();
+  } else {
+    $('#AI-dropdown').hide();
+  }
 
   // Click on any empty slot
   $(document).on('click', '.box', function() {
@@ -382,6 +390,11 @@ $(document).ready(function() {
     resetGame();
     $('#init-game-mode-box').modal('hide');
     $('#input-box').modal('show');
+    if(tictactoe.state.gameMode === 'Single') {
+      $('#AI-dropdown').show();
+    } else {
+      $('#AI-dropdown').hide();
+    }
   });
 
   // init-single-mode clicked
@@ -522,6 +535,7 @@ $(document).ready(function() {
     $('#input-box2').modal('hide');
     tictactoe.state.currentPlayer = 1;
     inputCounter = 0;
+
   }
 
   // Enter game button in "input-box", player2
