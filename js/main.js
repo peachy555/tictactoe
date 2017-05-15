@@ -1,10 +1,9 @@
 // To check
-// - Why doesn't .box:hover working
-// - How to "remove/hide" background image of .box ('x' and 'o')
-
 
 // Things left to do
 // - Support networked multiplayer
+// - Border around logo when selected
+// - Clean up and restructure code
 
 
 // window.firebaseExample = new Firebase('https://docs-examples.firebaseio.com/web/data');
@@ -485,6 +484,10 @@ $(document).ready(function() {
   // Choosing logo in "input-box"
   $(document).on('click', '.logo-element', function() {
     var logoName = $(this).attr('value');
+    if( $('.logo-element').hasClass('selected') ) {
+      $('.logo-element').removeClass('selected');
+    }
+    $(this).addClass('selected');
     tictactoe.state.scoreBoard['player'+tictactoe.state.currentPlayer].logo = logoName;
   });
 
