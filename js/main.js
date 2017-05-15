@@ -22,6 +22,22 @@ $(document).ready(function() {
   var boardSize = 'normal';
   var inputCounter = 1;
 
+  var gameModeBtnToggle = function() {
+    if(tictactoe.state.gameMode === 'Single') {
+      $('#AI-dropdown').show();
+      $('#single-mode').addClass('primary');
+      $('#local-mode').removeClass('primary');
+      $('#init-single-mode').addClass('primary');
+      $('#init-local-mode').removeClass('primary');
+    } else {
+      $('#AI-dropdown').hide();
+      $('#local-mode').addClass('primary');
+      $('#single-mode').removeClass('primary');
+      $('#init-local-mode').addClass('primary');
+      $('#init-single-mode').removeClass('primary');
+    }
+  }
+
   var initializeGame = function() {
     var localGame = localStorage.getItem("tictactoeState");
     // Load previous data
@@ -43,12 +59,7 @@ $(document).ready(function() {
     } else {
       $('#init-game-mode-box').modal('show');
     }
-
-    if(tictactoe.state.gameMode === 'Single') {
-      $('#AI-dropdown').show();
-    } else {
-      $('#AI-dropdown').hide();
-    }
+    gameModeBtnToggle();
   }
 
   // Update score board
@@ -77,12 +88,7 @@ $(document).ready(function() {
         localStorage.setItem("tictactoeState", JSON.stringify(tictactoe.state));
     });
     $("#board").fadeIn(800);
-
-    if(tictactoe.state.gameMode === 'Single') {
-      $('#AI-dropdown').show();
-    } else {
-      $('#AI-dropdown').hide();
-    }
+    gameModeBtnToggle();
   };
 
   window.tictactoe = {
@@ -372,12 +378,7 @@ $(document).ready(function() {
 
   initializeGame();
   var selectedPlayer ='player'+tictactoe.state.currentPlayer;
-
-  if(tictactoe.state.gameMode === 'Single') {
-    $('#AI-dropdown').show();
-  } else {
-    $('#AI-dropdown').hide();
-  }
+  gameModeBtnToggle();
 
   // Click on any empty slot
   $(document).on('click', '.box', function() {
@@ -396,19 +397,13 @@ $(document).ready(function() {
     resetGame();
     $('#init-game-mode-box').modal('hide');
     $('#input-box').modal('show');
-
-    if(tictactoe.state.gameMode === 'Single') {
-      $('#AI-dropdown').show();
-    } else {
-      $('#AI-dropdown').hide();
-    }
+    gameModeBtnToggle();
   });
 
   // init-single-mode clicked
   $(document).on('click', '#init-single-mode', function() {
     tictactoe.state.currentPlayer = 1;
     $('#input-box').modal('show');
-
   });
 
   // init-online-mode clicked
@@ -542,7 +537,6 @@ $(document).ready(function() {
     $('#input-box2').modal('hide');
     tictactoe.state.currentPlayer = 1;
     inputCounter = 0;
-
   }
 
   // Enter game button in "input-box", player2
@@ -554,7 +548,4 @@ $(document).ready(function() {
       getNameLogo2();
     }
   });
-
-
-// End of JavaScript
 });
